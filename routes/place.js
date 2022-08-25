@@ -1,51 +1,32 @@
-const express = require("express");
-const placeSchema = require("../models/place");
+const PlacesController =require('../controllers/PlacesController');
+const authMiddleware = require('../middleware/auth');
+const { body} = require('express-validator');
+const express = require('express');
+
 
 const router = express.Router();
 
-// create place
-router.post("/places", (req, res) => {
-  const user = placeSchema(req.body);
-  user
-    .save()
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
-});
+//obtener establecimiento
 
-// get all place
-router.get("/places", (req, res) => {
-  placeSchema
-    .find()
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
-});
-
-// get a place
-router.get("/places/:id", (req, res) => {
-  const { id } = req.params;
-  placeSchema
-    .findById(id)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
-});
-
-// delete a place
-router.delete("/places/:id", (req, res) => {
-  const { id } = req.params;
-  placeSchema
-    .remove({ _id: id })
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
-});
-
-// update a place
-router.put("/places/:id", (req, res) => {
-  const { id } = req.params;
-  const { name, description, address } = req.body;
-  placeSchema
-    .updateOne({ _id: id }, { $set: { name, description, address } })
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
-});
+router.get('/api/locales',
+[ 
+    body('establecimiento')
+        .exists().withMessage('El establecimiento es requerido')
+        .isAlpha().withMessage('El establecimiento debe contener solo caracteres alfabéticos')
+        .trim()
+        .escape(),
+    body('metros')
+        .exists().withMessage('Los metros son requerido')
+        .isNumeric().withMessage('Los metros deben ser solo caracteres numericos'),
+    body('latitud')
+        .exists().withMessage('Los metros son requerido')
+        .isNumeric().withMessage('Los metros deben ser solo caracteres numericos'),
+    body('longitud')
+        .exists().withMessage('Los metros son requerido')
+        .isNumeric().withMessage('Los metros deben ser solo caracteres numericos')
+],
+authMiddleware,
+PlacesController.GetLocales 
+);
 
 module.exports = router;

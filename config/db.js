@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 require('dotenv').config({path: '.env'});
 
-const {MONGOOSE_URI} = process.env;
+const {MONGOOSE_URI, MONGOOSE_URI_TEST, NODE_ENV} = process.env;
+console.log(NODE_ENV);
 
-
-const URI = MONGOOSE_URI;
+const URI = NODE_ENV === 'test' || NODE_ENV === 'development' ? MONGOOSE_URI_TEST : MONGOOSE_URI;
 
 const conectarDB = async() => {
     try {
@@ -12,7 +12,7 @@ const conectarDB = async() => {
             useNewUrlParser: true,
             useUnifiedTopology:true,
         })
-        console.log(`Conexión a la base de datos "${process.env.NOMBREDB}" establecida Exitosamente`);
+        console.log(`Conexión a BD "${process.env.NOMBREDB}" establecida`);
     } catch (error) {
         console.log(`Conexión a BD fallo`);
         console.log(error);
