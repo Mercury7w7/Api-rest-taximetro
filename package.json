@@ -1,0 +1,39 @@
+{
+  "name": "api-rest-taximetro",
+  "version": "1.0.0",
+  "description": "Creación exitosa",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "test": "npx mocha --watch --timeout 20000 ./test/index.js",
+    "dev": " nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mercury7w7/Api-rest-taximetro.git"
+  },
+  "keywords": [],
+  "author": "Mauricio Eligio Ramirez Rincon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mercury7w7/Api-rest-taximetro/issues"
+  },
+  "homepage": "https://github.com/Mercury7w7/Api-rest-taximetro#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.2",
+    "nodemailer": "^6.7.8"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.19"
+  }
+}
