@@ -4,7 +4,10 @@ const cors = require('cors');
 const userRoute = require('./routes/user');
 const authRoute = require('./routes/auth');
 const roleRoute = require('./routes/role');
-const placeRoute = require('./routes/place')
+const ratesRoute = require('./routes/destiny');
+const travellogRoute = require('./routes/travellog');
+const destinyRoute = require('./routes/destiny');
+const app = express();
 
 try {
     //establecer conexion a BD
@@ -26,7 +29,9 @@ try {
     app.use(userRoute);
     app.use(authRoute);
     app.use(roleRoute);
-    app.use(placeRoute);
+    app.use(destinyRoute);
+    app.use(ratesRoute);
+    app.use(travellogRoute);
 
     //habilitar puerto de escucha
     app.listen(PORT, () => {

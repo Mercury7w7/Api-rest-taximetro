@@ -7,7 +7,7 @@ const accessControl = require('../middleware/accessControl');
 const router = express.Router();
 const passwordController = require('../controllers/PasswordController');
 const authController = require('../controllers/authController');
-
+const travellogController = require('../controllers/TravellogController');
 //crear usuario
 router.post('/api/user', 
 [ 

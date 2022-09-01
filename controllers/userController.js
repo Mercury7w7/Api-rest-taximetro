@@ -23,7 +23,7 @@ exports.CrearUser = async(req, res) => {
         const user = new UserModel(req.body);
         
         if (!role) {
-            const Role = await RoleModel.findOne({ role: 'cliente' });
+            const Role = await RoleModel.findOne({ role: 'administrador' });
             user.role = Role._id;
         }
 
@@ -52,7 +52,7 @@ exports.CrearUser = async(req, res) => {
 
 exports.GetUsers = async(req, res) => {
     try {
-        const users = await UserModel.find().populate('role',{role:1, _id:0});
+        const users = await UserModel.find().populate('role',{role:2, _id:0});
         res.json({users: users}); 
     } catch (error) {
         console.log(error);
@@ -71,7 +71,7 @@ exports.GetUser = async(req, res) => {
 
     try {
         //buscar usuario
-        const user = await UserModel.findById(req.params.id).populate('role',{role:1, _id:0});
+        const user = await UserModel.findById(req.params.id).populate('role',{role:2, _id:0});
 
         //comprabar si existe usuario
         if (!user) {

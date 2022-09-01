@@ -3,7 +3,7 @@ const UserModel = require('../models/user');
 
 module.exports = async(req, res, next) => {
     try {
-        const principalesRoles = ['cliente', 'administrador', 'super-administrador'];
+        const principalesRoles = [ 'administrador', 'chofer'];
 
         //**buscar el usuario por id proveniente de auth
         const user = await UserModel.findById(req.usuario.id).populate('role',{role:2, _id:0});
@@ -29,13 +29,11 @@ module.exports = async(req, res, next) => {
 
 function compareRoles(role, roles) {
     //**compara el role del usuario con los roles principales
-    if (role.toUpperCase() === roles[0].toUpperCase()) {
-        return {access: true, role: roles[0]};
+    if (role.toUpperCase() === roles[2].toUpperCase()) {
+        return {access: true, role: roles[2]};
     } else if (role.toUpperCase() === roles[1].toUpperCase()) {
         return {access: true, role: roles[1]};
-    } else if (role.toUpperCase() === roles[2].toUpperCase()) {
-        return {access: true, role: roles[2]};
-    }
+    } 
     return {access: false};
 }
 
@@ -43,12 +41,12 @@ async function canDoThisQuery(url, method, idFromAuth, role, roles) {
     
     //**si se consulta la ruta de roles...
     if (url.includes('/api/rol')) {
-        //**El cliente o administrador no puede acceder a los metodos de roles
-        if (role.toUpperCase() === roles[0].toUpperCase()  || role.toUpperCase() === roles[1].toUpperCase()) {
+        //**El chofer no puede acceder a los metodos de roles
+        if (role.toUpperCase() === roles[1].toUpperCase()) {
             return false;    
         } 
         
-        //**El super-administrador puede acceder a todos los metodos de roles
+        //**El administrador puede acceder a todos los metodos de roles
         if (role.toUpperCase() === roles[2].toUpperCase()) {
             return true;
         }
@@ -59,42 +57,8 @@ async function canDoThisQuery(url, method, idFromAuth, role, roles) {
         let id = '';
         let findUser = {};
 
-        //**El Cliente... 
-        if (role.toUpperCase() === roles[0].toUpperCase()) {
-            switch (method) {
-                case 'GET':
-                    //**puede acceder al metodo GET si el id de la url es igual al id de la autenticacion
-                    id = url.slice(10);// /api/user/:id => solo toma el id
-                    if (id === idFromAuth) {
-                        return true;
-                    }else{
-                        return false;
-                    }
-                case 'POST':
-                    //**no puede acceder al metodo POST
-                    return false;
-                case 'PUT':
-                    //**puede acceder al metodo PUT si el id de la url es igual al id de la autenticacion
-                    id = url.slice(10);// /api/user/:id => solo toma el id
-                    if (id === idFromAuth) {
-                        return true;
-                    }else{
-                        return false;
-                    }
-                case 'DELETE':
-                    //**puede acceder al metodo DELETE si el id de la url es igual al id de la autenticacion
-                    id = url.slice(10);// /api/user/:id => solo toma el id
-                    if (id === idFromAuth) {
-                        return true;
-                    }else{
-                        return false;
-                    }
-                default:
-                    return;
-            }
-        } 
-        
-        //**El Administrador...
+    
+        //**El Chofer...
         if (role.toUpperCase() === roles[1].toUpperCase()) {
             switch (method) {
                 case 'GET':
@@ -117,10 +81,10 @@ async function canDoThisQuery(url, method, idFromAuth, role, roles) {
                     //**tiene acceso al metodo DELETE si el usuario a borrar no es super-administrador
                     id = url.slice(10);// /api/user/:id => solo toma el id
                     
-                    //buscar el usuario por id de la url
+                    //**buscar el usuario por id de la url
                     findUser = await UserModel.findById(id).populate('role',{role:1, _id:0});
                     
-                    //si el role del usuario es igual a super-usuario no podra borrarlo
+                    //**si el role del usuario es igual a super-usuario no podra borrarlo
                     if (findUser.role.role.toUpperCase() === roles[2].toUpperCase()) {
                         return false;
                     }else {
@@ -131,7 +95,7 @@ async function canDoThisQuery(url, method, idFromAuth, role, roles) {
             }
         }
         
-        //**El super-administrador tiene acceso a todos los metodos de usuarios
+        //**El administrador tiene acceso a todos los metodos de usuarios
         if (role.toUpperCase() === roles[2].toUpperCase()) {
             return true;
         }

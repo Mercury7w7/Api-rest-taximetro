@@ -2,7 +2,6 @@ const chai = require('chai');
 const chaihttp = require('chai-http');
 const app = require('../index');
 const mongoose = require('mongoose');
-const RoleModel = require('../models/role');
 const conectarDB = require('../config/db');
 require('dotenv').config({path: '.env'});
 
@@ -33,6 +32,7 @@ after(async function () {
 //login
 describe('Login',() => {
     //test for login, OK
+    //console.log("llega");
     it('Debería retornar un status 200 + msg', (done) => {
         chai.request(app)
             .post('/login')

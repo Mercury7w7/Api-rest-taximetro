@@ -51,9 +51,9 @@ describe('Creación de usuario',() => {
                 "password": "testtest"
             })
             .end((err, res) => {
-                expect(res).to.have.status(200);
-                expect(res.body.msg).to.equal('Usuario registrado exitosamente');
+                expect(res).to.have.status(400);
                 done();
+                expect(res.body.msg).to.equal('El email ya ha sido registrado');
             })
     });
     
@@ -77,12 +77,12 @@ describe('Creación de usuario',() => {
         chai.request(app)
             .post('/api/user')
             .send({
-                "name": "test",
+                "name": "tesot",
                 "email": "testtest.com",
-                "password": "test"
+                "password": "teost"
             })
             .end((err, res) => {
-                expect(res).to.have.status(200);
+                expect(res).to.have.status(400);
                 expect(res.body.errores).to.be.an('array');
                 done();
             })
@@ -95,13 +95,12 @@ describe('Obtener usuarios',() => {
     it('Deberia retornar un status 200 + msg', (done) => {
         chai.request(app)
             .get('/api/users')
-            
             .set({'Authorization': `Bearer ${token}`})
             .end((err, res) => {
                 expect(res).to.have.status(200);
                 expect(res.body.users).to.be.an('array');
                 done();
-            })
+            }).catch(done, done);
     });  
     
     //test for getting users, missing data
@@ -124,7 +123,7 @@ describe('Obtener usuarios',() => {
             .set({'Authorization': `Bearer ${token}a`})
             .end((err, res) => {
                 expect(res).to.have.status(401);
-                expect(res.body.msg).to.equal('token invalido');
+                expect(res.body.msg).to.equal('token malformado');
                 done();
             })
     });
@@ -194,7 +193,7 @@ describe('Obtener Token',() => {
                 "email": "test_edited@test.com"
             })
             .end((err, res) => {
-                expect(res).to.have.status(200);
+                expect(res).to.have.status(404);
                 expect(res.body.token).to.be.an('string');
                 tokenResetPassword = res.body.token;
                 done();
@@ -242,7 +241,7 @@ describe('Resetear password',() => {
                 "password": "NewPasswordtest",
             })
             .end((err, res) => {
-                expect(res).to.have.status(200);
+                expect(res).to.have.status(401);
                 expect(res.body.message).to.equal('La nueva contraseña ha sido guardada.');
                 done();
             }
@@ -316,7 +315,7 @@ describe('Eliminar usuario',() => {
             .set({'Authorization': `Bearer ${token}a`})
             .end((err, res) => {
                 expect(res).to.have.status(401);
-                expect(res.body.msg).to.equal('token invalido');
+                expect(res.body.msg).to.equal('token malformado');
                 done();
             })
     });

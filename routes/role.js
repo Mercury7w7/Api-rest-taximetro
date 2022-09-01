@@ -1,6 +1,6 @@
 const express = require('express');
-const RoleController = require('../controllers/roleController');
 const { body, param} = require('express-validator');
+const RoleController = require('../controllers/roleController');
 const authMiddleware = require('../middleware/auth');
 const accessControl = require('../middleware/accessControl');
 

@@ -4,8 +4,8 @@
   "description": "Creación exitosa",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node index.js",
-    "test": "npx mocha --watch --timeout 20000 ./test/index.js",
+    "start": "production node index.js",
+    "test": "npx mocha --watch --no-timeout --timeout 20000 ./test/index.js",
     "dev": " nodemon ./index.js"
   },
   "repository": {
